@@ -19,6 +19,7 @@ public class Calculator extends JFrame implements ActionListener {
 
     JTextField[] text = new JTextField[4];
 
+    StringBuilder s = new StringBuilder();
     public static void main(String[] args) {
         new Calculator();
     }
@@ -128,7 +129,7 @@ public class Calculator extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        StringBuilder s = new StringBuilder();
+
         String number = e.getActionCommand();
         switch (number) {
             case "0":
