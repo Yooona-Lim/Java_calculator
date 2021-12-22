@@ -2,6 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Calculator extends JFrame implements ActionListener {
 
@@ -202,6 +207,20 @@ public class Calculator extends JFrame implements ActionListener {
         textField.setText(sb.toString());
     }
 
+    public void saveList(List resultList) {
+        Date date = new Date();//获取当前时间
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
+        String fileName = dateFormat.format(date) + ".txt";//文件名
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
+            String[] items = resultList.getItems();
+            for (String item : items) {
+                bw.write(item+"\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String number = e.getActionCommand();
@@ -292,6 +311,10 @@ public class Calculator extends JFrame implements ActionListener {
 
             case "清除":
                 resultList.removeAll();
+                break;
+
+            case "保存":
+                saveList(resultList);
                 break;
         }
     }
