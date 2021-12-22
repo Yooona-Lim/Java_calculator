@@ -14,7 +14,7 @@ public class Calculator extends JFrame implements ActionListener {
     final JTextField[] text = new JTextField[4];
 
     StringBuilder s1 = new StringBuilder();//左
-    String s2;//右
+    String s2 = "";//右
     StringBuilder s3 = new StringBuilder();//中
 
     //"LEFT" "RIGHT" "MID" "RESULT"
@@ -146,7 +146,7 @@ public class Calculator extends JFrame implements ActionListener {
         return buttonBox2;
     }
 
-    public void cleanPanel() {
+    public void cleanPanel(StringBuilder s1, StringBuilder s3) {
         s1.delete(0, s1.length());
         s3.delete(0, s3.length());
         for (JTextField jTextField : text) {
@@ -155,7 +155,7 @@ public class Calculator extends JFrame implements ActionListener {
         status = "LEFT";
     }
 
-    public float calculate(String s2) {
+    public float calculate(StringBuilder s1, String s2, StringBuilder s3) {
         float result = 0;
         switch (s2) {
             case "/":
@@ -178,18 +178,25 @@ public class Calculator extends JFrame implements ActionListener {
         return result;
     }
 
-    public void addList(float result) {
+    public void back(StringBuilder s, JTextField textField) {
+        if (s.length() != 0) {
+            s.delete(s.length() - 1, s.length());
+            textField.setText(s.toString());
+        }
+    }
+
+    public void addList(StringBuilder s1, String s2, StringBuilder s3, float result) {
         String temp = s1.toString() + " " + s2 + " " + s3.toString() + " = " + result;
         resultList.add(temp);
     }
 
     public void positive_negative(StringBuilder sb, JTextField textField) {
-        if (sb.toString().equals("0")) {
+        if (sb.toString().equals("0")) {//为0则不变正负
             return;
         }
         if (String.valueOf(sb.charAt(0)).equals("-")) {
             sb.deleteCharAt(0);
-        }else {
+        } else {
             sb.insert(0, "-");
         }
         textField.setText(sb.toString());
@@ -197,7 +204,6 @@ public class Calculator extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         String number = e.getActionCommand();
         System.out.print(number + " ");
         switch (number) {
@@ -214,7 +220,7 @@ public class Calculator extends JFrame implements ActionListener {
             case ".":
                 if ("RESULT".equals(status)) {
                     System.out.println(status);
-                    cleanPanel(); //先清除再做
+                    cleanPanel(s1, s3); //先清除再做
                     s1.append(number);
                     text[0].setText(s1.toString());
                     break;
@@ -237,13 +243,10 @@ public class Calculator extends JFrame implements ActionListener {
 
             case "退格":
                 if ("RESULT".equals(status)) {
-                    break;
+                    break;//结果出来了不能退格
                 }
                 if ("LEFT".equals(status)) {
-                    if (s1.length() != 0) {
-                        s1.delete(s1.length() - 1, s1.length());
-                        text[0].setText(s1.toString());
-                    }
+                    back(s1, text[0]);
                     break;
                 }
                 if ("MID".equals(status)) {
@@ -252,10 +255,7 @@ public class Calculator extends JFrame implements ActionListener {
                     break;
                 }
                 if ("RIGHT".equals(status)) {
-                    if (s3.length() != 0) {
-                        s3.delete(s3.length() - 1, s3.length());
-                        text[2].setText(s3.toString());
-                    }
+                    back(s3, text[2]);
                     break;
                 }
 
@@ -282,12 +282,12 @@ public class Calculator extends JFrame implements ActionListener {
             case "=":
                 status = "RESULT";
                 System.out.println(status);
-                float result = calculate(s2);
-                addList(result);
+                float result = calculate(s1, s2, s3);
+                addList(s1, s2, s3, result);
                 break;
 
             case "C":
-                cleanPanel();
+                cleanPanel(s1, s3);
                 break;
 
             case "清除":
