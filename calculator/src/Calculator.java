@@ -260,6 +260,16 @@ public class Calculator extends JFrame implements ActionListener {
                     break;
                 }
 
+            case "1/x":
+                if ("LEFT".equals(status)) {
+                    s1 = new StringBuilder(String.valueOf(1 / Float.parseFloat(s1.toString())));
+                    text[0].setText(s1.toString());
+                }
+                if ("RIGHT".equals(status)) {
+                    s3 = new StringBuilder(String.valueOf(1 / Float.parseFloat(s3.toString())));
+                    text[2].setText(s3.toString());
+                }
+                break;
             case "退格":
                 if ("RESULT".equals(status)) {
                     break;//结果出来了不能退格
