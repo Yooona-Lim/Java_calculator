@@ -23,6 +23,7 @@ public class Calculator extends JFrame implements ActionListener {
     String s2;//右
     StringBuilder s3 = new StringBuilder();//中
 
+    //"LEFT" "RIGHT" "MID" "CLEAN"
     String status = "LEFT";//初始化窗口默认位置
 
     public static void main(String[] args) {
@@ -152,7 +153,7 @@ public class Calculator extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         String number = e.getActionCommand();
-        System.out.println(number+" "+status);
+        System.out.print(number+" ");
         switch (number) {
             case "0":
             case "1":
@@ -166,12 +167,14 @@ public class Calculator extends JFrame implements ActionListener {
             case "9":
             case ".":
                 if ("CLEAN".equals(status)) {
+                    System.out.println(status);
                     cleanPanel(); //先清除再做
                     s1.append(number);
                     text[0].setText(s1.toString());
                     break;
                 }
                 if ("LEFT".equals(status)) {
+                    System.out.println(status);
                     s1.append(number);
                     text[0].setText(s1.toString());
                     break;
@@ -179,13 +182,13 @@ public class Calculator extends JFrame implements ActionListener {
                 if ("MID".equals(status)) {//如果状态在中间就做
                     status = "RIGHT";//更改状态,此时在右边数字框
                 }
-                if ("RIGHT".equals(status)) {{
+                if ("RIGHT".equals(status)) {
+                    System.out.println(status);
                     s3.append(number);
                     text[2].setText(s3.toString());
                     break;
-                }}
+                }
             case "退格":
-                //System.out.println(status);
                 if ("CLEAN".equals(status)) {
                     break;
                 }
@@ -216,10 +219,12 @@ public class Calculator extends JFrame implements ActionListener {
                 text[1].setText(number);//设置文本框显示
                 s2 = number; //设置运算符
                 status = "MID";
+                System.out.println(status);
                 break;
 
             case "=":
                 status = "CLEAN";
+                System.out.println(status);
                 float result;
                 switch (s2) {
                     case "/":
