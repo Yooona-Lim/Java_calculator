@@ -5,17 +5,11 @@ import java.awt.event.ActionListener;
 
 public class Calculator extends JFrame implements ActionListener {
 
-    final JPanel topPanel = new JPanel();//顶部的四个文本框容器,JPanel默认流布局
-    final Box bottomBox = Box.createHorizontalBox();//除了顶部,下面的盒子,样式为水平
-
-    final Box buttonBox = Box.createVerticalBox();//bottomBox的左边一大块按钮
     final JButton[][] buttons = new JButton[4][5];//左边的若干按钮
 
     final Box rightBox = Box.createVerticalBox();//bottomBox的右边一大块
-    final TextArea textArea = new TextArea(8, 10);//文本域
-
+    final List resultList = new List(11, true);//列表选择框
     final JButton[] buttons2 = new JButton[3];//右下的若干按钮
-    final Box buttonBox2 = Box.createVerticalBox();//第二个承载按钮的盒子
 
     final JTextField[] text = new JTextField[4];
 
@@ -23,7 +17,7 @@ public class Calculator extends JFrame implements ActionListener {
     String s2;//右
     StringBuilder s3 = new StringBuilder();//中
 
-    //"LEFT" "RIGHT" "MID" "CLEAN"
+    //"LEFT" "RIGHT" "MID" "RESULT"
     String status = "LEFT";//初始化窗口默认位置
 
     public static void main(String[] args) {
@@ -31,31 +25,35 @@ public class Calculator extends JFrame implements ActionListener {
     }
 
     public Calculator() {
+        final Box bottomBox = Box.createHorizontalBox();//除了顶部,下面的盒子,样式为水平
+
         setTitle("计算器");
         setResizable(false);
-        setBounds(100, 100, 550, 300);
+        setBounds(100, 100, 700, 340);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         add(Box.createVerticalStrut(8));
 
-        loadTopPanel();//加载顶部的那四个显示框,放至topPanel
+        JPanel topPanel = loadTopPanel();//加载顶部的那四个显示框,放至topPanel
         add(topPanel);
 
         add(Box.createVerticalStrut(8));
 
         bottomBox.add(Box.createHorizontalStrut(7));//左边的间距
 
-        loadButtonBox();//加载左边一大块按钮
+        final Font font = new Font("等线", Font.BOLD, 16);
+        Box buttonBox = loadButtonBox(font);//加载左边一大块按钮
         bottomBox.add(buttonBox);
 
         bottomBox.add(Box.createHorizontalStrut(3)); //左右中间的间隔
 
-        rightBox.add(textArea);
+        //加入列表选择框
+        rightBox.add(resultList);
 
-        rightBox.add(Box.createVerticalStrut(12));//文本域距离下边三个盒子的距离
+        rightBox.add(Box.createVerticalStrut(10));//文本域距离下边三个盒子的距离
 
-        loadButtonBox2();//加载第二个承载按钮的盒子
+        Box buttonBox2 = loadButtonBox2(font);//加载第二个承载按钮的盒子
         rightBox.add(buttonBox2);
 
         bottomBox.add(Box.createHorizontalStrut(2));
@@ -65,14 +63,15 @@ public class Calculator extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    public void loadTopPanel() {
+    public JPanel loadTopPanel() {
+        final JPanel topPanel = new JPanel();//顶部的四个文本框容器,JPanel默认流布局
         //使用的字体及大小
         final Font font = new Font("", Font.BOLD, 25);
         //上面的四个文本框
         text[0] = new JTextField(8);
-        text[1] = new JTextField(4);
+        text[1] = new JTextField(5);
         text[2] = new JTextField(8);
-        text[3] = new JTextField(14);
+        text[3] = new JTextField(13);
 
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 
@@ -85,23 +84,26 @@ public class Calculator extends JFrame implements ActionListener {
         text[2].setHorizontalAlignment(JTextField.LEADING);
         text[3].setHorizontalAlignment(JTextField.CENTER);
 
-        text[0].setPreferredSize(new Dimension(175, 60));
-        text[1].setPreferredSize(new Dimension(50, 60));
-        text[2].setPreferredSize(new Dimension(175, 60));
-        text[3].setPreferredSize(new Dimension(175, 60));
+        text[0].setPreferredSize(new Dimension(175, 9));
+        text[1].setPreferredSize(new Dimension(50, 9));
+        text[2].setPreferredSize(new Dimension(175, 9));
+        text[3].setPreferredSize(new Dimension(175, 9));
 
         topPanel.add(Box.createHorizontalStrut(7));
         for (int i = 0; i < 3; i++) {
             topPanel.add(text[i]);
         }
         //因为面板要加间距,所以分开加进去
-        topPanel.add(Box.createHorizontalStrut(10));
+        topPanel.add(Box.createHorizontalStrut(8));
         topPanel.add(text[3]);
         topPanel.add(Box.createHorizontalStrut(5));
+        return topPanel;
     }
 
-    public void loadButtonBox() {
-        final Font font = new Font("微软雅黑", Font.BOLD, 12);
+    public Box loadButtonBox(Font font) {
+        final Box buttonBox = Box.createVerticalBox();//bottomBox的左边一大块按钮
+
+
         final JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(4, 5, 5, 10));
         final String[][] names = {
@@ -119,10 +121,13 @@ public class Calculator extends JFrame implements ActionListener {
         }
         buttonBox.add(buttonPanel);
         buttonBox.add(Box.createVerticalStrut(5));//下面的边距
+        return buttonBox;
     }
 
-    public void loadButtonBox2() {
-        final Font font = new Font("微软雅黑", Font.BOLD, 12);
+    public Box loadButtonBox2(Font font) {
+        final Box buttonBox2 = Box.createVerticalBox();//第二个承载按钮的盒子
+
+        //final Font font = new Font("微软雅黑", Font.BOLD, 14);
         JPanel buttonPanel2 = new JPanel();
         buttonPanel2.setLayout(new GridLayout(1, 3, 8, 8));
 
@@ -130,30 +135,71 @@ public class Calculator extends JFrame implements ActionListener {
         buttons2[1] = new JButton("查看");
         buttons2[2] = new JButton("清除");
         for (JButton button : buttons2) {
-            button.setPreferredSize(new Dimension(65, 43));
+            button.setPreferredSize(new Dimension(55, 43));
             buttonPanel2.add(button);
             button.setFont(font);
+            button.addActionListener(this);
         }
         buttonBox2.add(buttonPanel2);
 
         buttonBox2.add(Box.createVerticalStrut(5));//右盒子距离下边的宽度
+        return buttonBox2;
     }
 
     public void cleanPanel() {
         s1.delete(0, s1.length());
         s3.delete(0, s3.length());
-        text[0].setText("");
-        text[1].setText("");
-        text[2].setText("");
-        text[3].setText("");
+        for (JTextField jTextField : text) {
+            jTextField.setText("");
+        }
         status = "LEFT";
+    }
+
+    public float calculate(String s2) {
+        float result = 0;
+        switch (s2) {
+            case "/":
+                result = Float.parseFloat(s1.toString()) / Float.parseFloat(s3.toString());
+                text[3].setText(String.valueOf(result));
+                break;
+            case "*":
+                result = Float.parseFloat(s1.toString()) * Float.parseFloat(s3.toString());
+                text[3].setText(String.valueOf(result));
+                break;
+            case "+":
+                result = Float.parseFloat(s1.toString()) + Float.parseFloat(s3.toString());
+                text[3].setText(String.valueOf(result));
+                break;
+            case "-":
+                result = Float.parseFloat(s1.toString()) - Float.parseFloat(s3.toString());
+                text[3].setText(String.valueOf(result));
+                break;
+        }
+        return result;
+    }
+
+    public void addList(float result) {
+        String temp = s1.toString() + " " + s2 + " " + s3.toString() + " = " + result;
+        resultList.add(temp);
+    }
+
+    public void positive_negative(StringBuilder sb, JTextField textField) {
+        if (sb.toString().equals("0")) {
+            return;
+        }
+        if (String.valueOf(sb.charAt(0)).equals("-")) {
+            sb.deleteCharAt(0);
+        }else {
+            sb.insert(0, "-");
+        }
+        textField.setText(sb.toString());
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
         String number = e.getActionCommand();
-        System.out.print(number+" ");
+        System.out.print(number + " ");
         switch (number) {
             case "0":
             case "1":
@@ -166,7 +212,7 @@ public class Calculator extends JFrame implements ActionListener {
             case "8":
             case "9":
             case ".":
-                if ("CLEAN".equals(status)) {
+                if ("RESULT".equals(status)) {
                     System.out.println(status);
                     cleanPanel(); //先清除再做
                     s1.append(number);
@@ -188,12 +234,13 @@ public class Calculator extends JFrame implements ActionListener {
                     text[2].setText(s3.toString());
                     break;
                 }
+
             case "退格":
-                if ("CLEAN".equals(status)) {
+                if ("RESULT".equals(status)) {
                     break;
                 }
                 if ("LEFT".equals(status)) {
-                    if (!s1.toString().equals("")){
+                    if (s1.length() != 0) {
                         s1.delete(s1.length() - 1, s1.length());
                         text[0].setText(s1.toString());
                     }
@@ -205,7 +252,7 @@ public class Calculator extends JFrame implements ActionListener {
                     break;
                 }
                 if ("RIGHT".equals(status)) {
-                    if (!s3.toString().equals("")){
+                    if (s3.length() != 0) {
                         s3.delete(s3.length() - 1, s3.length());
                         text[2].setText(s3.toString());
                     }
@@ -216,38 +263,35 @@ public class Calculator extends JFrame implements ActionListener {
             case "*":
             case "-":
             case "+":
+                if (s1.length() == 0 || status.equals("RESULT")) {
+                    break;
+                }
                 text[1].setText(number);//设置文本框显示
                 s2 = number; //设置运算符
                 status = "MID";
                 System.out.println(status);
                 break;
-
-            case "=":
-                status = "CLEAN";
-                System.out.println(status);
-                float result;
-                switch (s2) {
-                    case "/":
-                        result = Float.parseFloat(s1.toString()) / Float.parseFloat(s3.toString());
-                        text[3].setText(String.valueOf(result));
-                        break;
-                    case "*":
-                        result = Float.parseFloat(s1.toString()) * Float.parseFloat(s3.toString());
-                        text[3].setText(String.valueOf(result));
-                        break;
-                    case "+":
-                        result = Float.parseFloat(s1.toString()) + Float.parseFloat(s3.toString());
-                        text[3].setText(String.valueOf(result));
-                        break;
-                    case "-":
-                        result = Float.parseFloat(s1.toString()) - Float.parseFloat(s3.toString());
-                        text[3].setText(String.valueOf(result));
-                        break;
+            case "+/-":
+                if (status.equals("LEFT")) {
+                    positive_negative(s1, text[0]);
                 }
+                if (status.equals("RIGHT")) {
+                    positive_negative(s3, text[2]);
+                }
+                break;
+            case "=":
+                status = "RESULT";
+                System.out.println(status);
+                float result = calculate(s2);
+                addList(result);
                 break;
 
             case "C":
                 cleanPanel();
+                break;
+
+            case "清除":
+                resultList.removeAll();
                 break;
         }
     }
