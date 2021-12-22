@@ -19,7 +19,7 @@ public class Calculator extends JFrame implements ActionListener {
     final JTextField[] text = new JTextField[4];
 
     StringBuilder s1 = new StringBuilder();//左
-    String s2 = "";//右
+    String s2;//右
     StringBuilder s3 = new StringBuilder();//中
 
     //"LEFT" "RIGHT" "MID" "RESULT"
@@ -309,6 +309,9 @@ public class Calculator extends JFrame implements ActionListener {
                 }
                 break;
             case "=":
+                if ("RESULT".equals(status)||"LEFT".equals(status)||"MID".equals(status)) {
+                    break;
+                }
                 status = "RESULT";
                 System.out.println(status);
                 float result = calculate(s1, s2, s3);
