@@ -2,19 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Calculator extends JFrame implements ActionListener {
-
-    final JButton[][] buttons = new JButton[4][5];//左边的若干按钮
-
-    final Box rightBox = Box.createVerticalBox();//bottomBox的右边一大块
-    final List resultList = new List(11, true);//列表选择框
-    final JButton[] buttons2 = new JButton[3];//右下的若干按钮
 
     final JTextField[] text = new JTextField[4];
 
@@ -22,8 +14,10 @@ public class Calculator extends JFrame implements ActionListener {
     String s2;//右
     StringBuilder s3 = new StringBuilder();//中
 
+    final List resultList = new List(11, true);//列表选择框
+
     //"LEFT" "RIGHT" "MID" "RESULT"
-    String status = "LEFT";//初始化窗口默认位置
+    static String status = "LEFT";//初始化窗口默认位置
 
     public static void main(String[] args) {
         new Calculator();
@@ -48,17 +42,21 @@ public class Calculator extends JFrame implements ActionListener {
         bottomBox.add(Box.createHorizontalStrut(7));//左边的间距
 
         final Font font = new Font("等线", Font.BOLD, 16);
-        Box buttonBox = loadButtonBox(font);//加载左边一大块按钮
+
+        final JButton[][] buttons = new JButton[4][5];//左边的若干按钮
+        Box buttonBox = loadButtonBox(font, buttons);//加载左边一大块按钮
         bottomBox.add(buttonBox);
 
         bottomBox.add(Box.createHorizontalStrut(3)); //左右中间的间隔
 
+        final Box rightBox = Box.createVerticalBox();//bottomBox的右边一大块
         //加入列表选择框
         rightBox.add(resultList);
 
         rightBox.add(Box.createVerticalStrut(10));//文本域距离下边三个盒子的距离
 
-        Box buttonBox2 = loadButtonBox2(font);//加载第二个承载按钮的盒子
+        final JButton[] buttons2 = new JButton[3];//右下的若干按钮
+        Box buttonBox2 = loadButtonBox2(font, buttons2);//加载第二个承载按钮的盒子
         rightBox.add(buttonBox2);
 
         bottomBox.add(Box.createHorizontalStrut(2));
@@ -105,7 +103,7 @@ public class Calculator extends JFrame implements ActionListener {
         return topPanel;
     }
 
-    public Box loadButtonBox(Font font) {
+    public Box loadButtonBox(Font font, JButton[][] buttons) {
         final Box buttonBox = Box.createVerticalBox();//bottomBox的左边一大块按钮
 
         final JPanel buttonPanel = new JPanel();
@@ -128,7 +126,7 @@ public class Calculator extends JFrame implements ActionListener {
         return buttonBox;
     }
 
-    public Box loadButtonBox2(Font font) {
+    public Box loadButtonBox2(Font font, JButton[] buttons2) {
         final Box buttonBox2 = Box.createVerticalBox();//第二个承载按钮的盒子
 
         //final Font font = new Font("微软雅黑", Font.BOLD, 14);
@@ -150,33 +148,38 @@ public class Calculator extends JFrame implements ActionListener {
         return buttonBox2;
     }
 
-    public void cleanPanel(StringBuilder s1, StringBuilder s3) {
+    public void changeValue(String tabValue, StringBuilder s, JTextField jTextField) {
+        s.append(tabValue);
+        jTextField.setText(s.toString());
+    }
+
+    public void cleanPanel(StringBuilder s1, StringBuilder s3, JTextField[] texts) {
         s1.delete(0, s1.length());
         s3.delete(0, s3.length());
-        for (JTextField jTextField : text) {
+        for (JTextField jTextField : texts) {
             jTextField.setText("");
         }
         status = "LEFT";
     }
 
-    public float calculate(StringBuilder s1, String s2, StringBuilder s3) {
+    public float calculate(StringBuilder s1, String s2, StringBuilder s3, JTextField textField) {
         float result = 0;
         switch (s2) {
             case "/":
                 result = Float.parseFloat(s1.toString()) / Float.parseFloat(s3.toString());
-                text[3].setText(String.valueOf(result));
+                textField.setText(String.valueOf(result));
                 break;
             case "*":
                 result = Float.parseFloat(s1.toString()) * Float.parseFloat(s3.toString());
-                text[3].setText(String.valueOf(result));
+                textField.setText(String.valueOf(result));
                 break;
             case "+":
                 result = Float.parseFloat(s1.toString()) + Float.parseFloat(s3.toString());
-                text[3].setText(String.valueOf(result));
+                textField.setText(String.valueOf(result));
                 break;
             case "-":
                 result = Float.parseFloat(s1.toString()) - Float.parseFloat(s3.toString());
-                text[3].setText(String.valueOf(result));
+                textField.setText(String.valueOf(result));
                 break;
         }
         return result;
@@ -189,9 +192,9 @@ public class Calculator extends JFrame implements ActionListener {
         }
     }
 
-    public void addList(StringBuilder s1, String s2, StringBuilder s3, float result) {
+    public void addList(StringBuilder s1, String s2, StringBuilder s3, float result, List results) {
         String temp = s1.toString() + " " + s2 + " " + s3.toString() + " = " + result;
-        resultList.add(temp);
+        results.add(temp);
     }
 
     public void positive_negative(StringBuilder sb, JTextField textField) {
@@ -210,13 +213,42 @@ public class Calculator extends JFrame implements ActionListener {
         Date date = new Date();//获取当前时间
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
         String fileName = dateFormat.format(date) + ".txt";//文件名
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             String[] items = resultList.getItems();
             for (String item : items) {
-                bw.write(item+"\n");
+                bw.write(item + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void viewFile(List list) {
+        String fileName = new FileChooseDialog(this).getFile();
+        System.out.println(fileName);
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))
+        ) {
+            list.removeAll();
+            int len;
+            char[] data = new char[20];
+            StringBuilder temp = new StringBuilder();
+            while ((len = br.read(data)) != -1) {
+                temp.append(data, 0, len);
+            }
+            int head = 0;
+            int index = temp.indexOf("\n");
+            while (index != temp.length()) {
+                String substring = temp.substring(head, index);
+                System.out.println("substring = " + substring);
+                list.add(substring);
+                temp.delete(head, index + 1);
+                index = temp.indexOf("\n");
+                if (index == -1) {
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -238,15 +270,13 @@ public class Calculator extends JFrame implements ActionListener {
             case ".":
                 if ("RESULT".equals(status)) {
                     System.out.println(status);
-                    cleanPanel(s1, s3); //先清除再做
-                    s1.append(tabValue);
-                    text[0].setText(s1.toString());
+                    cleanPanel(s1, s3, text); //先清除再做
+                    changeValue(tabValue, s1, text[0]);
                     break;
                 }
                 if ("LEFT".equals(status)) {
                     System.out.println(status);
-                    s1.append(tabValue);
-                    text[0].setText(s1.toString());
+                    changeValue(tabValue, s1, text[0]);
                     break;
                 }
                 if ("MID".equals(status)) {//如果状态在中间就做
@@ -257,8 +287,7 @@ public class Calculator extends JFrame implements ActionListener {
                 }
                 if ("RIGHT".equals(status)) {
                     System.out.println(status);
-                    s3.append(tabValue);
-                    text[2].setText(s3.toString());
+                    changeValue(tabValue, s3, text[2]);
                     break;
                 }
 
@@ -311,17 +340,17 @@ public class Calculator extends JFrame implements ActionListener {
                 }
                 break;
             case "=":
-                if ("RESULT".equals(status)||"LEFT".equals(status)||"MID".equals(status)) {
+                if (!"RIGHT".equals(status)) {
                     break;
                 }
                 status = "RESULT";
                 System.out.println(status);
-                float result = calculate(s1, s2, s3);
-                addList(s1, s2, s3, result);
+                float result = calculate(s1, s2, s3, text[3]);
+                addList(s1, s2, s3, result, resultList);
                 break;
 
             case "C":
-                cleanPanel(s1, s3);
+                cleanPanel(s1, s3, text);
                 break;
 
             case "清除":
@@ -330,6 +359,10 @@ public class Calculator extends JFrame implements ActionListener {
 
             case "保存":
                 saveList(resultList);
+                break;
+
+            case "查看":
+                viewFile(resultList);
                 break;
         }
     }
