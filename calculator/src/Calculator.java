@@ -108,7 +108,6 @@ public class Calculator extends JFrame implements ActionListener {
     public Box loadButtonBox(Font font) {
         final Box buttonBox = Box.createVerticalBox();//bottomBox的左边一大块按钮
 
-
         final JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(4, 5, 5, 10));
         final String[][] names = {
@@ -223,9 +222,9 @@ public class Calculator extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String number = e.getActionCommand();
-        System.out.print(number + " ");
-        switch (number) {
+        String tabValue = e.getActionCommand();
+        System.out.print(tabValue + " ");
+        switch (tabValue) {
             case "0":
             case "1":
             case "2":
@@ -240,22 +239,25 @@ public class Calculator extends JFrame implements ActionListener {
                 if ("RESULT".equals(status)) {
                     System.out.println(status);
                     cleanPanel(s1, s3); //先清除再做
-                    s1.append(number);
+                    s1.append(tabValue);
                     text[0].setText(s1.toString());
                     break;
                 }
                 if ("LEFT".equals(status)) {
                     System.out.println(status);
-                    s1.append(number);
+                    s1.append(tabValue);
                     text[0].setText(s1.toString());
                     break;
                 }
                 if ("MID".equals(status)) {//如果状态在中间就做
+                    if (s2.equals("")) {
+                        break;
+                    }
                     status = "RIGHT";//更改状态,此时在右边数字框
                 }
                 if ("RIGHT".equals(status)) {
                     System.out.println(status);
-                    s3.append(number);
+                    s3.append(tabValue);
                     text[2].setText(s3.toString());
                     break;
                 }
@@ -295,8 +297,8 @@ public class Calculator extends JFrame implements ActionListener {
                 if (s1.length() == 0 || status.equals("RESULT")) {
                     break;
                 }
-                text[1].setText(number);//设置文本框显示
-                s2 = number; //设置运算符
+                text[1].setText(tabValue);//设置文本框显示
+                s2 = tabValue; //设置运算符
                 status = "MID";
                 System.out.println(status);
                 break;
