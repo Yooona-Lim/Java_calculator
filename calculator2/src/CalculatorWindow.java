@@ -38,7 +38,7 @@ public class CalculatorWindow extends JFrame {
         final Font font = new Font("等线", Font.BOLD, 16);
 
         final JButton[][] buttons = new JButton[4][5];//左边的若干按钮
-        Box buttonBox = loadButtonBox(font, buttons, buttonAction);//加载左边一大块按钮
+        Box buttonBox = loadButtonBox(font, buttons, buttonAction,keyAction);//加载左边一大块按钮
         bottomBox.add(buttonBox);
 
         bottomBox.add(Box.createHorizontalStrut(3)); //左右中间的间隔
@@ -84,7 +84,6 @@ public class CalculatorWindow extends JFrame {
         for (JTextField jTextField : text) {
             jTextField.setEditable(false);
             jTextField.setFont(font);
-            jTextField.addKeyListener(keyAction);
         }
         text[0].setHorizontalAlignment(JTextField.TRAILING);
         text[1].setHorizontalAlignment(JTextField.CENTER);
@@ -107,7 +106,7 @@ public class CalculatorWindow extends JFrame {
         return topPanel;
     }
 
-    public Box loadButtonBox(Font font, JButton[][] buttons, ButtonAction buttonAction) {
+    public Box loadButtonBox(Font font, JButton[][] buttons, ButtonAction buttonAction,KeyAction keyAction) {
         final Box buttonBox = Box.createVerticalBox();//bottomBox的左边一大块按钮
 
         final JPanel buttonPanel = new JPanel();
@@ -122,6 +121,7 @@ public class CalculatorWindow extends JFrame {
                 buttons[row][col].setFont(font);
                 buttons[row][col].setPreferredSize(new Dimension(65, 50));
                 buttons[row][col].addActionListener(buttonAction);
+                buttons[row][col].addKeyListener(keyAction);
                 buttonPanel.add(buttons[row][col]); // 将按钮添加到按钮面板中
             }
         }
