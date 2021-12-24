@@ -273,7 +273,6 @@ public class Calculator extends JFrame implements ActionListener {
             case "7":
             case "8":
             case "9":
-            case ".":
                 if ("RESULT".equals(status)) {
                     System.out.println(status);
                     cleanPanel(s1, s3, text); //先清除再做
@@ -292,6 +291,23 @@ public class Calculator extends JFrame implements ActionListener {
                     status = "RIGHT";//更改状态,此时在右边数字框
                 }
                 if ("RIGHT".equals(status)) {
+                    System.out.println(status);
+                    changeValue(tabValue, s3, text[2]);
+                    break;
+                }
+            case ".":
+                if ("LEFT".equals(status)) {
+                    if (s1.indexOf(".") != -1) {
+                        break;
+                    }
+                    System.out.println(status);
+                    changeValue(tabValue, s1, text[0]);
+                    break;
+                }
+                if ("RIGHT".equals(status)) {
+                    if (s3.indexOf(".") != -1) {
+                        break;
+                    }
                     System.out.println(status);
                     changeValue(tabValue, s3, text[2]);
                     break;
