@@ -23,11 +23,11 @@ public class CalculatorWindow extends JFrame {
     KeyAction keyAction = new KeyAction(this);
 
     public CalculatorWindow() {
-        basicInit();//初始化大小位置
+        basicInit();//初始化
 
         add(Box.createVerticalStrut(8));
 
-        JPanel topPanel = loadTopPanel(text);//加载顶部的那四个显示框,放至topPanel
+        JPanel topPanel = loadTopPanel(text,keyAction);//加载顶部的那四个显示框,放至topPanel
         add(topPanel);
 
         add(Box.createVerticalStrut(8));
@@ -69,7 +69,7 @@ public class CalculatorWindow extends JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(CalculatorWindow.class.getResource("Porsche.png")));
     }
 
-    public JPanel loadTopPanel(JTextField[] text) {
+    public JPanel loadTopPanel(JTextField[] text,KeyAction keyAction) {
         final JPanel topPanel = new JPanel();//顶部的四个文本框容器,JPanel默认流布局
         //使用的字体及大小
         final Font font = new Font("", Font.BOLD, 25);
@@ -84,6 +84,7 @@ public class CalculatorWindow extends JFrame {
         for (JTextField jTextField : text) {
             jTextField.setEditable(false);
             jTextField.setFont(font);
+            jTextField.addKeyListener(keyAction);
         }
         text[0].setHorizontalAlignment(JTextField.TRAILING);
         text[1].setHorizontalAlignment(JTextField.CENTER);
