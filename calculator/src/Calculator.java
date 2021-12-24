@@ -30,7 +30,6 @@ public class Calculator extends JFrame implements ActionListener {
     }
 
     public Calculator() {
-        final Box bottomBox = Box.createHorizontalBox();//除了顶部,下面的盒子,样式为水平
 
         setTitle("计算器");
         setResizable(false);
@@ -45,6 +44,7 @@ public class Calculator extends JFrame implements ActionListener {
 
         add(Box.createVerticalStrut(8));
 
+        final Box bottomBox = Box.createHorizontalBox();//除了顶部,下面的盒子,样式为水平
         bottomBox.add(Box.createHorizontalStrut(7));//左边的间距
 
         final Font font = new Font("等线", Font.BOLD, 16);
@@ -217,10 +217,11 @@ public class Calculator extends JFrame implements ActionListener {
 
     public void saveList(List resultList) {
         Date date = new Date();//获取当前时间
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("'Date' yyyy.MM.dd 'Time' HH.mm.ss");
         String fileName = dateFormat.format(date) + ".txt";//文件名
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             String[] items = resultList.getItems();
+            bw.write(dateFormat.format(date)+ "\n");
             for (String item : items) {
                 bw.write(item + "\n");
             }
