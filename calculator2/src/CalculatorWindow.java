@@ -4,10 +4,10 @@ import java.awt.*;
 /**
  * @author mobeicanyue
  * Create  2021-12-18 10:35
- * Describe:
+ * Describe:计算器的窗口
  */
 
-public class Calculator extends JFrame {
+public class CalculatorWindow extends JFrame {
     JTextField[] text = new JTextField[4];
 
     StringBuilder s1 = new StringBuilder();//左
@@ -17,12 +17,13 @@ public class Calculator extends JFrame {
     List resultList = new List(11, true);//列表选择框
 
     //"LEFT" "RIGHT" "MID" "RESULT"
-    String status = "LEFT";//初始化窗口默认位置
+    String status = "LEFT";//初始化窗口默认位置,*******非常重要,看懂这个即可理解本程序的控制流程,通过改变它来决定文本框位置!
 
     ButtonAction buttonAction = new ButtonAction(this);
+    KeyAction keyAction = new KeyAction(this);
 
-    public Calculator() {
-        init();//初始化大小位置
+    public CalculatorWindow() {
+        basicInit();//初始化大小位置
 
         add(Box.createVerticalStrut(8));
 
@@ -59,13 +60,13 @@ public class Calculator extends JFrame {
         setVisible(true);
     }
 
-    public void init() {
+    public void basicInit() { //初始化窗体的基本设置
         setTitle("create by mobeiCanyue                                       Calculator");
         setResizable(false);
-        setBounds(100, 100, 700, 340);
+        setBounds(200, 200, 700, 340);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        setIconImage(Toolkit.getDefaultToolkit().getImage(Calculator.class.getResource("Porsche.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(CalculatorWindow.class.getResource("Porsche.png")));
     }
 
     public JPanel loadTopPanel(JTextField[] text) {
@@ -83,6 +84,7 @@ public class Calculator extends JFrame {
         for (JTextField jTextField : text) {
             jTextField.setEditable(false);
             jTextField.setFont(font);
+            jTextField.addKeyListener(keyAction);
         }
         text[0].setHorizontalAlignment(JTextField.TRAILING);
         text[1].setHorizontalAlignment(JTextField.CENTER);
