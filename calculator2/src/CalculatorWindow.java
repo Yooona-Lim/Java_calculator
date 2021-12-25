@@ -1,8 +1,5 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author mobeicanyue
@@ -35,7 +32,7 @@ public class CalculatorWindow extends JFrame {
 
         add(Box.createVerticalStrut(8));
 
-        JPanel topPanel = loadTopPanel(text,keyAction);//加载顶部的那四个显示框,放至topPanel
+        JPanel topPanel = loadTopPanel(text, keyAction);//加载顶部的那四个显示框,放至topPanel
         add(topPanel);
 
         add(Box.createVerticalStrut(8));
@@ -46,7 +43,7 @@ public class CalculatorWindow extends JFrame {
         final Font font = new Font("等线", Font.BOLD, 16);
 
         final JButton[][] buttons = new JButton[4][5];//左边的若干按钮
-        Box buttonBox = loadButtonBox(font, buttons, buttonAction,keyAction);//加载左边一大块按钮
+        Box buttonBox = loadButtonBox(font, buttons, buttonAction, keyAction);//加载左边一大块按钮
         bottomBox.add(buttonBox);
 
         bottomBox.add(Box.createHorizontalStrut(3)); //左右中间的间隔
@@ -68,7 +65,7 @@ public class CalculatorWindow extends JFrame {
         setVisible(true);
     }
 
-    public JPanel loadTopPanel(JTextField[] text,KeyAction keyAction) {
+    public JPanel loadTopPanel(JTextField[] text, KeyAction keyAction) {
         final JPanel topPanel = new JPanel();//顶部的四个文本框容器,JPanel默认流布局
         //使用的字体及大小
         final Font font = new Font("", Font.BOLD, 25);
@@ -106,7 +103,7 @@ public class CalculatorWindow extends JFrame {
         return topPanel;
     }
 
-    public Box loadButtonBox(Font font, JButton[][] buttons, ButtonAction buttonAction,KeyAction keyAction) {
+    public Box loadButtonBox(Font font, JButton[][] buttons, ButtonAction buttonAction, KeyAction keyAction) {
         final Box buttonBox = Box.createVerticalBox();//bottomBox的左边一大块按钮
 
         final JPanel buttonPanel = new JPanel();
