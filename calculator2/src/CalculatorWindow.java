@@ -1,5 +1,8 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author mobeicanyue
@@ -10,17 +13,22 @@ import java.awt.*;
 public class CalculatorWindow extends JFrame {
     JTextField[] text = new JTextField[4];
 
-    StringBuilder s1 = new StringBuilder();//左
-    String s2;//右
-    StringBuilder s3 = new StringBuilder();//中
-
-    List resultList = new List(11, true);//列表选择框
+    List resultList = new List(11, false);//列表选择框
 
     //"LEFT" "RIGHT" "MID" "RESULT"
-    String status = "LEFT";//初始化窗口默认位置,*******非常重要,看懂这个即可理解本程序的控制流程,通过改变它来决定文本框位置!
+    String status = "LEFT";//初始化窗口默认位置,*******非常重要,看懂这个即可理解本程序的流程控制,通过改变它来决定文本框位置!
 
     ButtonAction buttonAction = new ButtonAction(this);
     KeyAction keyAction = new KeyAction(this);
+
+    public void basicInit() { //初始化窗体的基本设置
+        setTitle("create by mobeiCanyue                                       Calculator");
+        setResizable(false);
+        setBounds(200, 200, 700, 340);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(CalculatorWindow.class.getResource("Porsche.png")));
+    }
 
     public CalculatorWindow() {
         basicInit();//初始化
@@ -58,15 +66,6 @@ public class CalculatorWindow extends JFrame {
         bottomBox.add(Box.createHorizontalStrut(7));
         add(bottomBox);
         setVisible(true);
-    }
-
-    public void basicInit() { //初始化窗体的基本设置
-        setTitle("create by mobeiCanyue                                       Calculator");
-        setResizable(false);
-        setBounds(200, 200, 700, 340);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        setIconImage(Toolkit.getDefaultToolkit().getImage(CalculatorWindow.class.getResource("Porsche.png")));
     }
 
     public JPanel loadTopPanel(JTextField[] text,KeyAction keyAction) {

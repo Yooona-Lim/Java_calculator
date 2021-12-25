@@ -10,6 +10,10 @@ import java.util.Date;
  * Describe: 用于处理数据的类
  */
 public class DataHandle {
+    static StringBuilder s1 = new StringBuilder();//左
+    static String s2;//右
+    static StringBuilder s3 = new StringBuilder();//中
+
     public static void changeValue(String tabValue, StringBuilder s, JTextField jTextField) {
         s.append(tabValue);
         jTextField.setText(s.toString());
@@ -129,52 +133,52 @@ public class DataHandle {
             case "9":
                 if ("RESULT".equals(calculatorWindow.status)) {
                     System.out.println(calculatorWindow.status);
-                    DataHandle.cleanPanel(calculatorWindow, calculatorWindow.s1, calculatorWindow.s3, calculatorWindow.text); //先清除再做
-                    DataHandle.changeValue(tabValue, calculatorWindow.s1, calculatorWindow.text[0]);
+                    DataHandle.cleanPanel(calculatorWindow, s1, s3, calculatorWindow.text); //先清除再做
+                    DataHandle.changeValue(tabValue, s1, calculatorWindow.text[0]);
                     break;
                 }
                 if ("LEFT".equals(calculatorWindow.status)) {
                     System.out.println(calculatorWindow.status);
-                    DataHandle.changeValue(tabValue, calculatorWindow.s1, calculatorWindow.text[0]);
+                    DataHandle.changeValue(tabValue, s1, calculatorWindow.text[0]);
                     break;
                 }
                 if ("MID".equals(calculatorWindow.status)) {//如果状态在中间就做
-                    if (calculatorWindow.s2.equals("")) {
+                    if (s2.equals("")) {
                         break;
                     }
                     calculatorWindow.status = "RIGHT";//更改状态,此时在右边数字框
                 }
                 if ("RIGHT".equals(calculatorWindow.status)) {
                     System.out.println(calculatorWindow.status);
-                    DataHandle.changeValue(tabValue, calculatorWindow.s3, calculatorWindow.text[2]);
+                    DataHandle.changeValue(tabValue, s3, calculatorWindow.text[2]);
                     break;
                 }
             case ".":
                 if ("LEFT".equals(calculatorWindow.status)) {
-                    if (calculatorWindow.s1.indexOf(".") != -1) {
+                    if (s1.indexOf(".") != -1) {
                         break;
                     }
                     System.out.println(calculatorWindow.status);
-                    DataHandle.changeValue(tabValue, calculatorWindow.s1, calculatorWindow.text[0]);
+                    DataHandle.changeValue(tabValue, s1, calculatorWindow.text[0]);
                     break;
                 }
                 if ("RIGHT".equals(calculatorWindow.status)) {
-                    if (calculatorWindow.s3.indexOf(".") != -1) {
+                    if (s3.indexOf(".") != -1) {
                         break;
                     }
                     System.out.println(calculatorWindow.status);
-                    DataHandle.changeValue(tabValue, calculatorWindow.s3, calculatorWindow.text[2]);
+                    DataHandle.changeValue(tabValue, s3, calculatorWindow.text[2]);
                     break;
                 }
 
             case "1/x":
                 if ("LEFT".equals(calculatorWindow.status)) {
-                    calculatorWindow.s1 = new StringBuilder(String.valueOf(1 / Float.parseFloat(calculatorWindow.s1.toString())));
-                    calculatorWindow.text[0].setText(calculatorWindow.s1.toString());
+                    s1 = new StringBuilder(String.valueOf(1 / Float.parseFloat(s1.toString())));
+                    calculatorWindow.text[0].setText(s1.toString());
                 }
                 if ("RIGHT".equals(calculatorWindow.status)) {
-                    calculatorWindow.s3 = new StringBuilder(String.valueOf(1 / Float.parseFloat(calculatorWindow.s3.toString())));
-                    calculatorWindow.text[2].setText(calculatorWindow.s3.toString());
+                    s3 = new StringBuilder(String.valueOf(1 / Float.parseFloat(s3.toString())));
+                    calculatorWindow.text[2].setText(s3.toString());
                 }
                 break;
             case "退格":
@@ -182,16 +186,16 @@ public class DataHandle {
                     break;//结果出来了不能退格
                 }
                 if ("LEFT".equals(calculatorWindow.status)) {
-                    DataHandle.back(calculatorWindow.s1, calculatorWindow.text[0]);
+                    DataHandle.back(s1, calculatorWindow.text[0]);
                     break;
                 }
                 if ("MID".equals(calculatorWindow.status)) {
-                    calculatorWindow.s2 = "";
-                    calculatorWindow.text[1].setText(calculatorWindow.s2);
+                    s2 = "";
+                    calculatorWindow.text[1].setText(s2);
                     break;
                 }
                 if ("RIGHT".equals(calculatorWindow.status)) {
-                    DataHandle.back(calculatorWindow.s3, calculatorWindow.text[2]);
+                    DataHandle.back(s3, calculatorWindow.text[2]);
                     break;
                 }
 
@@ -199,20 +203,20 @@ public class DataHandle {
             case "*":
             case "-":
             case "+":
-                if (calculatorWindow.s1.length() == 0 || calculatorWindow.status.equals("RESULT")) {
+                if (s1.length() == 0 || calculatorWindow.status.equals("RESULT")) {
                     break;
                 }
                 calculatorWindow.text[1].setText(tabValue);//设置文本框显示
-                calculatorWindow.s2 = tabValue; //设置运算符
+                s2 = tabValue; //设置运算符
                 calculatorWindow.status = "MID";
                 System.out.println(calculatorWindow.status);
                 break;
             case "+/-":
                 if (calculatorWindow.status.equals("LEFT")) {
-                    DataHandle.positive_negative(calculatorWindow.s1, calculatorWindow.text[0]);
+                    DataHandle.positive_negative(s1, calculatorWindow.text[0]);
                 }
                 if (calculatorWindow.status.equals("RIGHT")) {
-                    DataHandle.positive_negative(calculatorWindow.s3, calculatorWindow.text[2]);
+                    DataHandle.positive_negative(s3, calculatorWindow.text[2]);
                 }
                 break;
             case "=":
@@ -221,12 +225,12 @@ public class DataHandle {
                 }
                 calculatorWindow.status = "RESULT";
                 System.out.println(calculatorWindow.status);
-                float result = DataHandle.calculate(calculatorWindow.s1, calculatorWindow.s2, calculatorWindow.s3, calculatorWindow.text[3]);
-                DataHandle.addList(calculatorWindow.s1, calculatorWindow.s2, calculatorWindow.s3, result, calculatorWindow.resultList);
+                float result = DataHandle.calculate(s1, s2, s3, calculatorWindow.text[3]);
+                DataHandle.addList(s1, s2, s3, result, calculatorWindow.resultList);
                 break;
 
             case "C":
-                DataHandle.cleanPanel(calculatorWindow, calculatorWindow.s1, calculatorWindow.s3, calculatorWindow.text);
+                DataHandle.cleanPanel(calculatorWindow, s1, s3, calculatorWindow.text);
                 break;
 
             case "清除":
@@ -234,7 +238,12 @@ public class DataHandle {
                 break;
 
             case "保存":
-                DataHandle.saveList(calculatorWindow.resultList);
+                if (calculatorWindow.resultList.getItemCount() == 0) {
+                    JOptionPane.showMessageDialog(calculatorWindow, "列表为空! ! ! ", "列表为空", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    DataHandle.saveList(calculatorWindow.resultList);
+                    JOptionPane.showMessageDialog(calculatorWindow, "保存成功", "保存成功", JOptionPane.INFORMATION_MESSAGE);
+                }
                 break;
 
             case "查看":

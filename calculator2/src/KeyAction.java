@@ -25,8 +25,10 @@ public class KeyAction implements KeyListener {
             tabValue = "退格";
         } else if (e.getKeyCode() == 10) {
             tabValue = "=";
-        } else if (e.getKeyCode() == 27) {
+        } else if (e.getKeyCode() == 116) {
             tabValue = "C";
+        } else if (e.getKeyCode() == 27) {
+            tabValue = "清除";
         } else {
             tabValue = String.valueOf(e.getKeyChar());
             System.out.print(tabValue + " ");
