@@ -196,11 +196,21 @@ public class DataHandle {
                     break;
                 }
                 if ("MID".equals(calculatorWindow.status)) {
+                    if (s2.equals("")) {//如果中间为空就跑到前面去
+                        calculatorWindow.status = "LEFT";
+                        DataHandle.back(s1, calculatorWindow.text[0]);
+                        break;
+                    }
                     s2 = "";
                     calculatorWindow.text[1].setText(s2);
                     break;
                 }
                 if ("RIGHT".equals(calculatorWindow.status)) {
+                    if (s3.toString().equals("")) {//如果后面为空就跑到中间去
+                        calculatorWindow.status = "MID";
+                        s2 = "";
+                        calculatorWindow.text[1].setText(s2);
+                    }
                     DataHandle.back(s3, calculatorWindow.text[2]);
                     break;
                 }
