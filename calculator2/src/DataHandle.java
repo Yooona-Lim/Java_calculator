@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * @author mobeiCanyue
  * Create  2021-12-24 19:25
- * Describe: 用于处理数据的类
+ * Describe: 用于处理数据的类,因为按钮事件和键盘事件的处理高度重合,所以分离出来简化代码
  */
 public class DataHandle {
     static StringBuilder s1 = new StringBuilder();//左
@@ -173,10 +173,16 @@ public class DataHandle {
 
             case "1/x":
                 if ("LEFT".equals(calculatorWindow.status)) {
+                    if (s1.toString().equals("")) {
+                        break;
+                    }
                     s1 = new StringBuilder(String.valueOf(1 / Float.parseFloat(s1.toString())));
                     calculatorWindow.text[0].setText(s1.toString());
                 }
                 if ("RIGHT".equals(calculatorWindow.status)) {
+                    if (s3.toString().equals("")) {
+                        break;
+                    }
                     s3 = new StringBuilder(String.valueOf(1 / Float.parseFloat(s3.toString())));
                     calculatorWindow.text[2].setText(s3.toString());
                 }
