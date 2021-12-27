@@ -70,9 +70,9 @@ public class CalculatorWindow extends JFrame {
         //使用的字体及大小
         final Font font = new Font("", Font.BOLD, 25);
         //上面的四个文本框
-        text[0] = new JTextField(8);
-        text[1] = new JTextField(5);
-        text[2] = new JTextField(8);
+        text[0] = new JTextField(9);
+        text[1] = new JTextField(2);
+        text[2] = new JTextField(9);
         text[3] = new JTextField(13);
 
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
@@ -110,7 +110,7 @@ public class CalculatorWindow extends JFrame {
         buttonPanel.setLayout(new GridLayout(4, 5, 5, 10));
         final String[][] names = {
                 {"1", "2", "3", "/", "C"}, {"4", "5", "6", "*", "退格"},
-                {"7", "8", "9", "-", "1/x"}, {"0", "+/-", ".", "+", "="}
+                {"7", "8", "9", "-", "sqrt"}, {"0", "+/-", ".", "+", "="}
         };
         for (int row = 0; row < names.length; row++) {
             for (int col = 0; col < names[0].length; col++) {

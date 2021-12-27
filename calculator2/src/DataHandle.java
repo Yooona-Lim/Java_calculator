@@ -171,19 +171,19 @@ public class DataHandle {
                     break;
                 }
 
-            case "1/x":
+            case "sqrt":
                 if ("LEFT".equals(calculatorWindow.status)) {
                     if (s1.toString().equals("")) {
                         break;
                     }
-                    s1 = new StringBuilder(String.valueOf(1 / Float.parseFloat(s1.toString())));
+                    s1 = new StringBuilder(String.valueOf(Math.sqrt(Float.parseFloat(s1.toString()))));
                     calculatorWindow.text[0].setText(s1.toString());
                 }
                 if ("RIGHT".equals(calculatorWindow.status)) {
                     if (s3.toString().equals("")) {
                         break;
                     }
-                    s3 = new StringBuilder(String.valueOf(1 / Float.parseFloat(s3.toString())));
+                    s3 = new StringBuilder(String.valueOf(Math.sqrt(Float.parseFloat(s3.toString()))));
                     calculatorWindow.text[2].setText(s3.toString());
                 }
                 break;
