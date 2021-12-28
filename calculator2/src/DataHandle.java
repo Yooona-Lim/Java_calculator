@@ -133,13 +133,13 @@ public class DataHandle {
             case "9":
                 if ("RESULT".equals(calculatorWindow.status)) {
                     System.out.println(calculatorWindow.status);
-                    DataHandle.cleanPanel(calculatorWindow, s1, s3, calculatorWindow.text); //先清除再做
-                    DataHandle.changeValue(tabValue, s1, calculatorWindow.text[0]);
+                    cleanPanel(calculatorWindow, s1, s3, calculatorWindow.text); //先清除再做
+                    changeValue(tabValue, s1, calculatorWindow.text[0]);
                     break;
                 }
                 if ("LEFT".equals(calculatorWindow.status)) {
                     System.out.println(calculatorWindow.status);
-                    DataHandle.changeValue(tabValue, s1, calculatorWindow.text[0]);
+                    changeValue(tabValue, s1, calculatorWindow.text[0]);
                     break;
                 }
                 if ("MID".equals(calculatorWindow.status)) {//如果状态在中间就做
@@ -150,7 +150,7 @@ public class DataHandle {
                 }
                 if ("RIGHT".equals(calculatorWindow.status)) {
                     System.out.println(calculatorWindow.status);
-                    DataHandle.changeValue(tabValue, s3, calculatorWindow.text[2]);
+                    changeValue(tabValue, s3, calculatorWindow.text[2]);
                     break;
                 }
             case ".":
@@ -159,7 +159,7 @@ public class DataHandle {
                         break;
                     }
                     System.out.println(calculatorWindow.status);
-                    DataHandle.changeValue(tabValue, s1, calculatorWindow.text[0]);
+                    changeValue(tabValue, s1, calculatorWindow.text[0]);
                     break;
                 }
                 if ("RIGHT".equals(calculatorWindow.status)) {
@@ -167,7 +167,7 @@ public class DataHandle {
                         break;
                     }
                     System.out.println(calculatorWindow.status);
-                    DataHandle.changeValue(tabValue, s3, calculatorWindow.text[2]);
+                    changeValue(tabValue, s3, calculatorWindow.text[2]);
                     break;
                 }
 
@@ -192,13 +192,13 @@ public class DataHandle {
                     break;//结果出来了不能退格
                 }
                 if ("LEFT".equals(calculatorWindow.status)) {
-                    DataHandle.back(s1, calculatorWindow.text[0]);
+                    back(s1, calculatorWindow.text[0]);
                     break;
                 }
                 if ("MID".equals(calculatorWindow.status)) {
                     if (s2.equals("")) {//如果中间为空就跑到前面去
                         calculatorWindow.status = "LEFT";
-                        DataHandle.back(s1, calculatorWindow.text[0]);
+                        back(s1, calculatorWindow.text[0]);
                         break;
                     }
                     s2 = "";
@@ -211,7 +211,7 @@ public class DataHandle {
                         s2 = "";
                         calculatorWindow.text[1].setText(s2);
                     }
-                    DataHandle.back(s3, calculatorWindow.text[2]);
+                    back(s3, calculatorWindow.text[2]);
                     break;
                 }
 
@@ -229,10 +229,10 @@ public class DataHandle {
                 break;
             case "+/-":
                 if (calculatorWindow.status.equals("LEFT")) {
-                    DataHandle.positive_negative(s1, calculatorWindow.text[0]);
+                    positive_negative(s1, calculatorWindow.text[0]);
                 }
                 if (calculatorWindow.status.equals("RIGHT")) {
-                    DataHandle.positive_negative(s3, calculatorWindow.text[2]);
+                    positive_negative(s3, calculatorWindow.text[2]);
                 }
                 break;
             case "=":
@@ -241,12 +241,12 @@ public class DataHandle {
                 }
                 calculatorWindow.status = "RESULT";
                 System.out.println(calculatorWindow.status);
-                float result = DataHandle.calculate(s1, s2, s3, calculatorWindow.text[3]);
-                DataHandle.addList(s1, s2, s3, result, calculatorWindow.resultList);
+                float result = calculate(s1, s2, s3, calculatorWindow.text[3]);
+                addList(s1, s2, s3, result, calculatorWindow.resultList);
                 break;
 
             case "C":
-                DataHandle.cleanPanel(calculatorWindow, s1, s3, calculatorWindow.text);
+                cleanPanel(calculatorWindow, s1, s3, calculatorWindow.text);
                 break;
 
             case "清除":
@@ -257,13 +257,13 @@ public class DataHandle {
                 if (calculatorWindow.resultList.getItemCount() == 0) {
                     JOptionPane.showMessageDialog(calculatorWindow, "列表为空! ! ! ", "列表为空", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    DataHandle.saveList(calculatorWindow.resultList);
+                    saveList(calculatorWindow.resultList);
                     JOptionPane.showMessageDialog(calculatorWindow, "保存成功", "保存成功", JOptionPane.INFORMATION_MESSAGE);
                 }
                 break;
 
             case "查看":
-                DataHandle.viewFile(calculatorWindow, calculatorWindow.resultList);
+                viewFile(calculatorWindow, calculatorWindow.resultList);
                 break;
         }
     }
