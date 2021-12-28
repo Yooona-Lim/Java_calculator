@@ -62,6 +62,16 @@ public class CalculatorWindow extends JFrame {
         bottomBox.add(rightBox);
         bottomBox.add(Box.createHorizontalStrut(7));
         add(bottomBox);
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
         setVisible(true);
     }
 
@@ -81,11 +91,8 @@ public class CalculatorWindow extends JFrame {
             jTextField.setEditable(false);
             jTextField.setFont(font);
             jTextField.addKeyListener(keyAction);
+            jTextField.setHorizontalAlignment(JTextField.CENTER);
         }
-        text[0].setHorizontalAlignment(JTextField.TRAILING);
-        text[1].setHorizontalAlignment(JTextField.CENTER);
-        text[2].setHorizontalAlignment(JTextField.LEADING);
-        text[3].setHorizontalAlignment(JTextField.CENTER);
 
         text[0].setPreferredSize(new Dimension(175, 9));
         text[1].setPreferredSize(new Dimension(50, 9));
