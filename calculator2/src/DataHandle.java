@@ -91,8 +91,13 @@ public class DataHandle {
     }
 
     public static void viewFile(CalculatorWindow calculatorWindow, List list) {
+
         String fileName = new FileChooseDialog(calculatorWindow).getFile();
-        System.out.println(fileName);
+        if (fileName == null) {
+            System.out.println("未选择文件");
+            return;
+        }
+
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))
         ) {
             list.removeAll();
@@ -114,8 +119,8 @@ public class DataHandle {
                     break;
                 }
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
