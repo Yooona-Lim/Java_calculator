@@ -14,18 +14,21 @@ public class DataHandle {
     static String s2;//右
     static StringBuilder s3 = new StringBuilder();//中
 
+    //"LEFT" "RIGHT" "MID" "RESULT"
+    static String status = "LEFT";//初始化窗口默认位置,*******非常重要,看懂这个即可理解本程序的流程控制,通过改变它来决定文本框位置!
+
     public static void changeValue(String tabValue, StringBuilder s, JTextField jTextField) {
         s.append(tabValue);
         jTextField.setText(s.toString());
     }
 
-    public static void cleanPanel(CalculatorWindow calculatorWindow, StringBuilder s1, StringBuilder s3, JTextField[] texts) {
+    public static void cleanPanel(StringBuilder s1, StringBuilder s3, JTextField[] texts) {
         s1.delete(0, s1.length());
         s3.delete(0, s3.length());
         for (JTextField jTextField : texts) {
             jTextField.setText("");
         }
-        calculatorWindow.status = "LEFT";
+        status = "LEFT";
     }
 
     public static float calculate(StringBuilder s1, String s2, StringBuilder s3, JTextField textField) {
@@ -136,55 +139,55 @@ public class DataHandle {
             case "7":
             case "8":
             case "9":
-                if ("RESULT".equals(calculatorWindow.status)) {
-                    System.out.println(calculatorWindow.status);
-                    cleanPanel(calculatorWindow, s1, s3, calculatorWindow.text); //先清除再做
+                if ("RESULT".equals(status)) {
+                    System.out.println(status);
+                    cleanPanel(s1, s3, calculatorWindow.text); //先清除再做
                     changeValue(tabValue, s1, calculatorWindow.text[0]);
                     break;
                 }
-                if ("LEFT".equals(calculatorWindow.status)) {
-                    System.out.println(calculatorWindow.status);
+                if ("LEFT".equals(status)) {
+                    System.out.println(status);
                     changeValue(tabValue, s1, calculatorWindow.text[0]);
                     break;
                 }
-                if ("MID".equals(calculatorWindow.status)) {//如果状态在中间就做
+                if ("MID".equals(status)) {//如果状态在中间就做
                     if (s2.equals("")) {
                         break;
                     }
-                    calculatorWindow.status = "RIGHT";//更改状态,此时在右边数字框
+                    status = "RIGHT";//更改状态,此时在右边数字框
                 }
-                if ("RIGHT".equals(calculatorWindow.status)) {
-                    System.out.println(calculatorWindow.status);
+                if ("RIGHT".equals(status)) {
+                    System.out.println(status);
                     changeValue(tabValue, s3, calculatorWindow.text[2]);
                     break;
                 }
             case ".":
-                if ("LEFT".equals(calculatorWindow.status)) {
+                if ("LEFT".equals(status)) {
                     if (s1.indexOf(".") != -1) {
                         break;
                     }
-                    System.out.println(calculatorWindow.status);
+                    System.out.println(status);
                     changeValue(tabValue, s1, calculatorWindow.text[0]);
                     break;
                 }
-                if ("RIGHT".equals(calculatorWindow.status)) {
+                if ("RIGHT".equals(status)) {
                     if (s3.indexOf(".") != -1) {
                         break;
                     }
-                    System.out.println(calculatorWindow.status);
+                    System.out.println(status);
                     changeValue(tabValue, s3, calculatorWindow.text[2]);
                     break;
                 }
 
             case "sqrt":
-                if ("LEFT".equals(calculatorWindow.status)) {
+                if ("LEFT".equals(status)) {
                     if (s1.toString().equals("")) {
                         break;
                     }
                     s1 = new StringBuilder(String.valueOf(Math.sqrt(Float.parseFloat(s1.toString()))));
                     calculatorWindow.text[0].setText(s1.toString());
                 }
-                if ("RIGHT".equals(calculatorWindow.status)) {
+                if ("RIGHT".equals(status)) {
                     if (s3.toString().equals("")) {
                         break;
                     }
@@ -193,16 +196,16 @@ public class DataHandle {
                 }
                 break;
             case "退格":
-                if ("RESULT".equals(calculatorWindow.status)) {
+                if ("RESULT".equals(status)) {
                     break;//结果出来了不能退格
                 }
-                if ("LEFT".equals(calculatorWindow.status)) {
+                if ("LEFT".equals(status)) {
                     back(s1, calculatorWindow.text[0]);
                     break;
                 }
-                if ("MID".equals(calculatorWindow.status)) {
+                if ("MID".equals(status)) {
                     if (s2.equals("")) {//如果中间为空就跑到前面去
-                        calculatorWindow.status = "LEFT";
+                        status = "LEFT";
                         back(s1, calculatorWindow.text[0]);
                         break;
                     }
@@ -210,9 +213,9 @@ public class DataHandle {
                     calculatorWindow.text[1].setText(s2);
                     break;
                 }
-                if ("RIGHT".equals(calculatorWindow.status)) {
+                if ("RIGHT".equals(status)) {
                     if (s3.toString().equals("")) {//如果后面为空就跑到中间去
-                        calculatorWindow.status = "MID";
+                        status = "MID";
                         s2 = "";
                         calculatorWindow.text[1].setText(s2);
                     }
@@ -224,34 +227,34 @@ public class DataHandle {
             case "*":
             case "-":
             case "+":
-                if (s1.length() == 0 || calculatorWindow.status.equals("RESULT")) {
+                if (s1.length() == 0 || status.equals("RESULT")) {
                     break;
                 }
                 calculatorWindow.text[1].setText(tabValue);//设置文本框显示
                 s2 = tabValue; //设置运算符
-                calculatorWindow.status = "MID";
-                System.out.println(calculatorWindow.status);
+                status = "MID";
+                System.out.println(status);
                 break;
             case "+/-":
-                if (calculatorWindow.status.equals("LEFT")) {
+                if (status.equals("LEFT")) {
                     positive_negative(s1, calculatorWindow.text[0]);
                 }
-                if (calculatorWindow.status.equals("RIGHT")) {
+                if (status.equals("RIGHT")) {
                     positive_negative(s3, calculatorWindow.text[2]);
                 }
                 break;
             case "=":
-                if (!"RIGHT".equals(calculatorWindow.status)) {
+                if (!"RIGHT".equals(status)) {
                     break;
                 }
-                calculatorWindow.status = "RESULT";
-                System.out.println(calculatorWindow.status);
+                status = "RESULT";
+                System.out.println(status);
                 float result = calculate(s1, s2, s3, calculatorWindow.text[3]);
                 addList(s1, s2, s3, result, calculatorWindow.resultList);
                 break;
 
             case "C":
-                cleanPanel(calculatorWindow, s1, s3, calculatorWindow.text);
+                cleanPanel(s1, s3, calculatorWindow.text);
                 break;
 
             case "清除":

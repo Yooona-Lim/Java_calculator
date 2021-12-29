@@ -12,9 +12,6 @@ public class CalculatorWindow extends JFrame {
 
     List resultList = new List(11, false);//列表选择框
 
-    //"LEFT" "RIGHT" "MID" "RESULT"
-    String status = "LEFT";//初始化窗口默认位置,*******非常重要,看懂这个即可理解本程序的流程控制,通过改变它来决定文本框位置!
-
     ButtonAction buttonAction = new ButtonAction(this);
     KeyAction keyAction = new KeyAction(this);
 
