@@ -28,6 +28,7 @@ public class DataHandle {
         for (JTextField jTextField : texts) {
             jTextField.setText("");
         }
+        texts[0].setText("0");
         status = "LEFT";
     }
 
@@ -200,7 +201,12 @@ public class DataHandle {
                     break;//结果出来了不能退格
                 }
                 if ("LEFT".equals(status)) {
-                    back(s1, calculatorWindow.text[0]);
+                    if (s1.length() == 1) {
+                        back(s1, calculatorWindow.text[0]);
+                        calculatorWindow.text[0].setText("0");
+                    } else {
+                        back(s1, calculatorWindow.text[0]);
+                    }
                     break;
                 }
                 if ("MID".equals(status)) {
